@@ -21,12 +21,19 @@ This project implements a **personalized product recommendation engine** for e-c
 ## 📁 Project Structure
 
 ├── api/ ← FastAPI app
+
 ├── streamlit_app/ ← UI to query API
+
 ├── models/ ← Pickled ALS model
+
 ├── notebooks/ ← EDA + training
+
 ├── run_api.py ← Script to start API
+
 ├── requirements.txt ← Dependencies
+
 ├── Dockerfile ← Docker build config
+
 ├── README.md ← You are here
 
 
