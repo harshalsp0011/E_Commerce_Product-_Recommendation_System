@@ -58,3 +58,8 @@ def get_recommendations(user_id: int, N: int = 5):
         return {"user_id": user_id, "recommended_items": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# === Start Uvicorn Server (for Render) ===
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
