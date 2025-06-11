@@ -33,6 +33,11 @@ class RecommendationResponse(BaseModel):
 # === FastAPI app ===
 app = FastAPI()
 
+
+@app.get("/")
+def root():
+    return {"status": "FastAPI is working"}
+
 @app.get("/recommendations", response_model=RecommendationResponse)
 def get_recommendations(user_id: int, N: int = 5):
     if user_id not in user_mapping:
