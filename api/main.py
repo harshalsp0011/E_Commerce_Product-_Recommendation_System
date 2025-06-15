@@ -2,19 +2,26 @@ from fastapi import FastAPI, HTTPException
 import uvicorn
 import numpy as np
 import pickle
+import joblib
 
 # Load model and mappings
 from implicit.als import AlternatingLeastSquares
 import scipy.sparse as sparse
 
 # === Load pre-trained model and data ===
-# These should be saved from your notebook
-model = pickle.load(open("models/als_model.pkl", "rb"))
 
-user_item_matrix = pickle.load(open("models/user_item_matrix.pkl", "rb"))
-user_mapping = pickle.load(open("models/user_mapping.pkl", "rb"))
-item_mapping = pickle.load(open("models/item_mapping.pkl", "rb"))
 
+# model = pickle.load(open("models/als_model.pkl", "rb"))
+
+# user_item_matrix = pickle.load(open("models/user_item_matrix.pkl", "rb"))
+# user_mapping = pickle.load(open("models/user_mapping.pkl", "rb"))
+# item_mapping = pickle.load(open("models/item_mapping.pkl", "rb"))
+
+
+model = joblib.load("models/als_model.joblib")
+user_item_matrix = joblib.load("models/user_item_matrix.joblib")
+user_mapping = joblib.load("models/user_mapping.joblib")
+item_mapping = joblib.load("models/item_mapping.joblib")
 # Reverse item mapping
 reverse_item_mapping = {v: k for k, v in item_mapping.items()}
 
