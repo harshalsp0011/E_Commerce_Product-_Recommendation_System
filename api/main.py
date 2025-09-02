@@ -45,26 +45,50 @@ app = FastAPI()
 def root():
     return {"status": "FastAPI is working"}
 
+@app.get("/users")
+def get_available_users(limit: int = 100):
+    try:
+        # Return the original user IDs
+        user_ids = [int(uid) for uid in list(user_mapping.keys())[:limit]]
+        return {"available_user_ids": user_ids}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch users: {str(e)}")
+
+
+
+
+
 @app.get("/recommendations", response_model=RecommendationResponse)
 def get_recommendations(user_id: int, N: int = 5):
     if user_id not in user_mapping:
         raise HTTPException(status_code=404, detail="User ID not found")
 
-    user_idx = user_mapping[user_id]
+    user_idx = user_mapping[user_id]  # maps visitorid to ALS index
     try:
         recommendations = model.recommend(user_idx, user_item_matrix[user_idx], N=N)
+
+        raw_scores = [score for _, score in recommendations]
+        min_score = min(raw_scores)
+        max_score = max(raw_scores)
+        range_score = max_score - min_score if max_score != min_score else 1.0
+
         results = []
-        for row in recommendations:
-            item_idx = int(row[0])
-            score = float(row[1])
+        for item_idx, raw_score in recommendations:
+            norm_score = (raw_score - min_score) / range_score
             if item_idx in reverse_item_mapping:
                 results.append({
-                    "item_id": int(reverse_item_mapping[item_idx]),
-                    "score": round(score, 4)
+                    "item_id": int(reverse_item_mapping[item_idx]),  # return actual item ID
+                    "score": round(norm_score, 4)
                 })
-        return {"user_id": user_id, "recommended_items": results}
+
+        return {
+            "user_id": int(user_id),  # return actual visitorid, not internal index
+            "recommended_items": results
+        }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Model failed: {str(e)}")
+
+
 
 
 # === Start Uvicorn Server (for Render) ===

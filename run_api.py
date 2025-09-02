@@ -20,3 +20,7 @@ subprocess.run(["uvicorn", "api.main:app", "--reload"])
 
 # comand to run docker 
 #docker run -p 8000:8000 recommender-api  
+
+
+# steamlit app
+#streamlit run streamlit_app/app.py
