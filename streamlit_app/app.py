@@ -5,7 +5,7 @@ import requests
 
 st.set_page_config(page_title="E-Commerce Recommender", layout="centered")
 
-st.title("🛍️ Product Recommendation Engine")
+st.title(" Product Recommendation Engine")
 st.write("Enter a user ID to get personalized product recommendations.")
 
 # Input form
@@ -23,6 +23,6 @@ if st.button("Get Recommendations"):
             for item in data["recommended_items"]:
                 st.write(f"📦 **Item ID:** `{item['item_id']}` — Score: `{item['score']}`")
         else:
-            st.error(f"❌ Error: {response.json()['detail']}")
+            st.error(f" Error: {response.json()['detail']}")
     except Exception as e:
-        st.error(f"⚠️ Could not connect to API: {e}")
+        st.error(f"Could not connect to API: {e}")
